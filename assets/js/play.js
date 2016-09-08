@@ -1,8 +1,6 @@
-let gameState = {
-  preload () {
-    game.load.image('player', 'assets/images/player.png')
-    game.load.image('enemy', 'assets/images/enemy.png')
-  },
+/* globals game, Phaser */
+
+let playState = {
   create () {
     // set game background color
     game.stage.backgroundColor = '#000'
@@ -14,8 +12,13 @@ let gameState = {
     this.player = game.add.sprite(10, 10, 'player')
     game.physics.enable(this.player)
     this.player.body.collideWorldBounds = true
+    // load audio when player shoot
+    this.playerShoot = game.add.audio('shoot')
 
     this.cursors = game.input.keyboard.createCursorKeys()
+    // shoot on spacebar
+    this.spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+    this.spaceBar.onDown.add(this.shoot, this)
   },
   update () {
     this.player.body.velocity.x = 0
@@ -23,16 +26,19 @@ let gameState = {
 
     if (this.cursors.left.isDown) {
       this.player.body.velocity.x = -150
+      this.player.frame = 3
     } else if (this.cursors.right.isDown) {
       this.player.body.velocity.x = 150
+      this.player.frame = 1
     } else if (this.cursors.up.isDown) {
       this.player.body.velocity.y = -150
+      this.player.frame = 0
     } else if (this.cursors.down.isDown) {
       this.player.body.velocity.y = 150
+      this.player.frame = 2
     }
+  },
+  shoot () {
+    this.playerShoot.play()
   }
 }
-
-let game = new Phaser.Game(800, 400, Phaser.AUTO)
-game.state.add('gameState', gameState)
-game.state.start('gameState')
