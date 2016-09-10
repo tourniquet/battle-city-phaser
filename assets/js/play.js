@@ -16,6 +16,11 @@ let playState = {
     // load audio when player shoot
     this.playerShoot = game.add.audio('shoot')
 
+    // create enemy
+    this.enemy = game.add.sprite(250, 250, 'enemy')
+    game.physics.enable(this.enemy)
+    this.enemy.anchor.setTo(0.5, 0.5)
+
     // player tank angle
     this.tankAngle = 0
 
@@ -52,8 +57,10 @@ let playState = {
       this.player.frame = 2
       this.tankAngle = 180
     }
+
+    //
+    game.physics.arcade.overlap(this.bullet, this.enemy, this.killEnemy, null, this)
   },
-  // create bullet and set X and Y position
   createBullet () {
     // get player tank coordinates
     let axisX = this.player.x
@@ -80,6 +87,15 @@ let playState = {
       this.bullet.body.velocity.y = 500
     }
   },
+  createExplosion () {
+    // create explosion animation
+    this.explosion = game.add.sprite(this.bullet.x, this.bullet.y, 'explosion')
+    this.explosion.anchor.setTo(0.5, 0.5)
+    this.explosion.animations.add('explode', [0, 1, 2, 1, 0], 20, false)
+    // http://phaser.io/docs/2.6.2/Phaser.Animation.html#play
+    // play(animation, frameRate, loop, killOnComplete)
+    this.explosion.animations.play('explode', 20, false, true)
+  },
   killBullet () {
     this.bullet.kill()
     this.bulletExists = false
@@ -91,5 +107,13 @@ let playState = {
       // create bullet only when user shoot and there's no other bullet already
       this.createBullet()
     }
+  },
+  killEnemy () {
+    // play explosion when bullet hit enemy
+    this.createExplosion()
+    // destroy enemy object
+    this.enemy.kill()
+    // destroy bullet
+    this.killBullet()
   }
 }
