@@ -16,10 +16,20 @@ let playState = {
     // load audio when player shoot
     this.playerShoot = game.add.audio('shoot')
 
+    // create the tilemap
+    this.level = game.add.tilemap('level')
+    // add 'brick' to the map
+    this.level.addTilesetImage('brick')
+    // create layer by specifying the name of the tiled layer
+    this.layer = this.level.createLayer('Tile Layer 1')
+    // player can't move trough walls
+    this.level.setCollision(1)
+
     // create enemy
     this.enemy = game.add.sprite(250, 250, 'enemy')
     game.physics.enable(this.enemy)
     this.enemy.anchor.setTo(0.5, 0.5)
+    this.enemy.body.moves = false
 
     // player tank angle
     this.tankAngle = 0
@@ -35,6 +45,11 @@ let playState = {
     this.spaceBar.onDown.add(this.shoot, this)
   },
   update () {
+    // collide player with enemy
+    game.physics.arcade.collide(this.player, this.enemy)
+    // collide enemy with walls
+    game.physics.arcade.collide(this.player, this.layer)
+
     this.player.body.velocity.x = 0
     this.player.body.velocity.y = 0
 

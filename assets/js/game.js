@@ -1,6 +1,6 @@
 /* globals game, Phaser */
 
-let game = new Phaser.Game(800, 400, Phaser.AUTO)
+let game = new Phaser.Game(800, 800, Phaser.AUTO)
 
 game.state.add('boot', bootState)
 game.state.add('load', loadState)

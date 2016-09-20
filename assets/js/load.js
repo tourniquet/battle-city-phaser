@@ -6,6 +6,11 @@ let loadState = {
     game.load.spritesheet('explosion', 'assets/images/explosion.png', 70, 70)
     game.load.image('bullet', 'assets/images/bullet.png')
     game.load.image('enemy', 'assets/images/enemy.png')
+
+    // load level design
+    game.load.image('brick', 'assets/images/brick.png')
+    game.load.tilemap('level', 'assets/maps/level.json', null, Phaser.Tilemap.TILED_JSON)
+
     // audio assets
     game.load.audio('shoot', ['assets/audio/shoot.mp3', 'assets/audio/shoot.ogg'])
   },
