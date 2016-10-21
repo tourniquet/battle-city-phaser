@@ -17,15 +17,15 @@
  "tileheight":50,
  "tilesets":[
         {
-         "columns":1,
+         "columns":2,
          "firstgid":1,
-         "image":"..\/images\/brick.png",
+         "image":"..\/images\/tiles.png",
          "imageheight":50,
-         "imagewidth":50,
+         "imagewidth":100,
          "margin":0,
-         "name":"brick",
+         "name":"tiles",
          "spacing":0,
-         "tilecount":1,
+         "tilecount":2,
          "tileheight":50,
          "tilewidth":50
         }],

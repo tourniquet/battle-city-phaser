@@ -16,14 +16,17 @@ let playState = {
     // load audio when player shoot
     this.playerShoot = game.add.audio('shoot')
 
-    // create the tilemap
-    this.level = game.add.tilemap('level')
-    // add 'brick' to the map
-    this.level.addTilesetImage('brick')
-    // create layer by specifying the name of the tiled layer
-    this.layer = this.level.createLayer('Tile Layer 1')
-    // player can't move trough walls
-    this.level.setCollision(1)
+    // create tilemap
+    this.map = game.add.tilemap('level')
+    // add tileset
+    this.map.addTilesetImage('tiles')
+    // create layer
+    this.layer = this.map.createLayer('Tile Layer 1')
+
+    this.bricks = game.add.group()
+    this.map.createFromTiles(1, 2, 'brick', this.layer.index, this.bricks)
+    game.physics.enable(this.bricks)
+    this.bricks.setAll('body.immovable', true)
 
     // create enemy
     this.enemy = game.add.sprite(250, 250, 'enemy')
@@ -48,7 +51,11 @@ let playState = {
     // collide player with enemy
     game.physics.arcade.collide(this.player, this.enemy)
     // collide enemy with walls
-    game.physics.arcade.collide(this.player, this.layer)
+    game.physics.arcade.collide(this.player, this.bricks)
+    // kill enemy on collide
+    game.physics.arcade.collide(this.bullet, this.enemy, this.killEnemy, null, this)
+    // destroy bricks on collide
+    game.physics.arcade.collide(this.bullet, this.bricks, this.killBrick, null, this)
 
     this.player.body.velocity.x = 0
     this.player.body.velocity.y = 0
@@ -72,9 +79,6 @@ let playState = {
       this.player.frame = 2
       this.tankAngle = 180
     }
-
-    //
-    game.physics.arcade.overlap(this.bullet, this.enemy, this.killEnemy, null, this)
   },
   createBullet () {
     // get player tank coordinates
@@ -125,10 +129,22 @@ let playState = {
   },
   killEnemy () {
     // play explosion when bullet hit enemy
+
     this.createExplosion()
     // destroy enemy object
     this.enemy.kill()
     // destroy bullet
     this.killBullet()
+  },
+  killBrick (bullet, brick) {
+    this.createExplosion()
+    // destroy bullet
+    this.killBullet()
+    // destroy brick
+    brick.kill()
   }
+  // ,
+  // render () {
+  //   game.debug.spriteInfo(this.player, 250, 500)
+  // }
 }

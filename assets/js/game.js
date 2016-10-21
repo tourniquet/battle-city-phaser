@@ -1,4 +1,4 @@
-/* globals game, Phaser */
+/* globals Phaser */
 
 let game = new Phaser.Game(800, 800, Phaser.AUTO)
 
